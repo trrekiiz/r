@@ -75,3 +75,66 @@ head(m)
 m %>%
   group_by(am) %>%
   summarise(mean(mpg))
+
+#plot
+names(m)
+plot(m$hp, m$mpg, pch = 16, col = "red", 
+     xlab="Horse Power", 
+     ylab="Mile per gallon",
+     main="Test plot")
+
+hist(m$mpg, probability = TRUE)
+lines(density(m$mpg))
+boxplot(m$mpg)
+summary(m$mpg)
+
+#ggplot2 
+
+ggplot(data=m,aes(x=hp, y=mpg)) + 
+  geom_point() +
+  geom_smooth()
+
+ggplot(data=m,aes(x=hp, y=mpg)) +
+  geom_point(size = 5,
+             alpha = 0.5)
+
+ggplot(data=m,aes(x=hp)) + 
+  geom_histogram(bins = 5, fill = "yellow") +
+  labs(x="house power",
+      y="frequency",
+      title="house power") +
+  theme_minimal()
+
+
+
+
+#LINEAR REGRESSION
+m <- mtcars
+m <- as.tbl(m)
+m
+cor(select(m, mpg, hp, wt, disp))
+
+model_lr <- lm(mpg ~ ., data = m)
+summary(model_lr)
+#plot(model_lr)
+
+#LOGISTIC REGRESSION
+#Classification
+library(MASS)
+biopsy
+log_r_model <- glm(class ~ . -ID, data = biopsy,
+                   family = "binomial")
+summary(log_r_model)
+
+#Decision Tree
+library(rpart)
+library(MASS)
+biopsy
+dt_model <- rpart(class ~. -ID, data= biopsy,
+                  method = "class")
+summary(dt_model)
+dt_model
+
+install.packages("rpart.plot")
+library("rpart.plot")
+rpart.plot(dt_model)
